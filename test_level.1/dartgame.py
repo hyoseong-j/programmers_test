@@ -1,32 +1,45 @@
-def solution(dartResult):  
+def solution(dartResult):
     answer = 0
-    a = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10']
+    a = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10']
     post = ['S', 'D', 'T']
     option = ['*', '#']
-    
-
-    S = 1
-    D = 2
-    T = 3
-    b = []
+    c = []
     for i in dartResult:
+        c.append(i)
+    bcount = len(c) - 1
+
+    for k in range(bcount):
+        if c[k] == '1' and c[k + 1] == '0':
+            c[k] = '10'
+            del c[k + 1]
+    b = []
+    for i in c:
         if i in a:
             b.append(int(i))
         elif i in post:
-            b.append(int(i))
+            for j in range(len(post)):
+                if i == post[j]:
+                    b.append(j + 1)
         elif i in option:
-            b.append(srt(i))
-        
-    for i in range(0, len(b) - 1, 2):
-        answer += b[i] ** b[i + 1]
-        if b[i] == '*':
-            answer *= 2
-        elif b[i] == '#':
-            answer += (b[i - 2] + b[i - 1]) * -1
-        
-            
-    return answer
-pritn(solution(1S))
-    
+            b.append(str(i))
+    count = 0
+    group = []
+    for i in range(0, len(b)):
+        if count >= len(b):
+            return answer
 
-    
+        if b[count] == '*':
+            group[-1] = group[-1] * 2
+            group[-2] = group[-2] * 2
+            count += 1
+        elif b[count] == '#':
+            count -= 2
+            group[count] = -group[count]
+            print(group)
+            count += 3
+        else:
+            group.append(b[count] ** b[count + 1])
+            count += 2
+        answer = sum(group)
+
+print(solution(input()))
